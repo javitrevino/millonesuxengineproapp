@@ -138,23 +138,29 @@ export default function Home() {
   };
 
   const LayerList = () => (
-    <div className="bg-white rounded-lg shadow p-4">
-      <h3 className="text-lg font-semibold mb-3 text-gray-800">Layers</h3>
+    <div className="p-4 h-full">
+      <h3 className="text-sm font-semibold mb-3 text-gray-700 uppercase tracking-wide">Layers</h3>
       {rectangles.length === 0 ? (
-        <p className="text-sm text-gray-500">No layers yet</p>
+        <p className="text-sm text-gray-400 italic">No layers yet</p>
       ) : (
         <div className="space-y-1">
           {rectangles.map((rectangle) => (
             <div
               key={rectangle.id}
-              className={`p-2 rounded cursor-pointer text-sm ${
+              className={`p-2 rounded cursor-pointer text-sm transition-colors ${
                 selectedRectId === rectangle.id
-                  ? "bg-blue-100 border border-blue-300"
-                  : "hover:bg-gray-50"
+                  ? "bg-blue-100 text-blue-900 border border-blue-200"
+                  : "hover:bg-gray-100 text-gray-700"
               }`}
               onClick={() => setSelectedRectId(rectangle.id)}
             >
-              {rectangle.name}
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded border"
+                  style={{ backgroundColor: rectangle.color }}
+                />
+                {rectangle.name}
+              </div>
             </div>
           ))}
         </div>
@@ -167,88 +173,98 @@ export default function Home() {
 
     if (!selectedRect) {
       return (
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold mb-3 text-gray-800">Properties</h3>
-          <p className="text-sm text-gray-500">Select a layer to edit properties</p>
+        <div className="p-4 h-full">
+          <h3 className="text-sm font-semibold mb-3 text-gray-700 uppercase tracking-wide">Properties</h3>
+          <p className="text-sm text-gray-400 italic">Select a layer to edit properties</p>
         </div>
       );
     }
 
     return (
-      <div className="bg-white rounded-lg shadow p-4">
-        <h3 className="text-lg font-semibold mb-3 text-gray-800">Properties</h3>
-        <div className="space-y-3">
+      <div className="p-4 h-full">
+        <h3 className="text-sm font-semibold mb-3 text-gray-700 uppercase tracking-wide">Properties</h3>
+        <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs font-medium text-gray-600 mb-1.5 uppercase tracking-wide">
               Name
             </label>
             <input
               type="text"
               value={selectedRect.name}
               onChange={(e) => updateRectangle(selectedRect.id, { name: e.target.value })}
-              className="w-full px-3 py-1 border border-gray-300 rounded text-sm"
+              className="w-full px-2.5 py-1.5 border border-gray-300 rounded text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs font-medium text-gray-600 mb-1.5 uppercase tracking-wide">
               Color
             </label>
-            <input
-              type="color"
-              value={selectedRect.color}
-              onChange={(e) => updateRectangle(selectedRect.id, { color: e.target.value })}
-              className="w-full h-8 border border-gray-300 rounded cursor-pointer"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                X Position
-              </label>
+            <div className="flex items-center gap-2">
               <input
-                type="number"
-                value={Math.round(selectedRect.x)}
-                onChange={(e) => updateRectangle(selectedRect.id, { x: parseInt(e.target.value) || 0 })}
-                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                type="color"
+                value={selectedRect.color}
+                onChange={(e) => updateRectangle(selectedRect.id, { color: e.target.value })}
+                className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Y Position
-              </label>
               <input
-                type="number"
-                value={Math.round(selectedRect.y)}
-                onChange={(e) => updateRectangle(selectedRect.id, { y: parseInt(e.target.value) || 0 })}
-                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                type="text"
+                value={selectedRect.color}
+                onChange={(e) => updateRectangle(selectedRect.id, { color: e.target.value })}
+                className="flex-1 px-2.5 py-1.5 border border-gray-300 rounded text-sm focus:border-blue-500 focus:outline-none font-mono"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Width
-              </label>
-              <input
-                type="number"
-                value={Math.round(Math.abs(selectedRect.width))}
-                onChange={(e) => updateRectangle(selectedRect.id, { width: parseInt(e.target.value) || 0 })}
-                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-              />
+          <div className="border-t pt-4">
+            <label className="block text-xs font-medium text-gray-600 mb-3 uppercase tracking-wide">
+              Position
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">X</label>
+                <input
+                  type="number"
+                  value={Math.round(selectedRect.x)}
+                  onChange={(e) => updateRectangle(selectedRect.id, { x: parseInt(e.target.value) || 0 })}
+                  className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Y</label>
+                <input
+                  type="number"
+                  value={Math.round(selectedRect.y)}
+                  onChange={(e) => updateRectangle(selectedRect.id, { y: parseInt(e.target.value) || 0 })}
+                  className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:border-blue-500 focus:outline-none"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Height
-              </label>
-              <input
-                type="number"
-                value={Math.round(Math.abs(selectedRect.height))}
-                onChange={(e) => updateRectangle(selectedRect.id, { height: parseInt(e.target.value) || 0 })}
-                className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-              />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-3 uppercase tracking-wide">
+              Size
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Width</label>
+                <input
+                  type="number"
+                  value={Math.round(Math.abs(selectedRect.width))}
+                  onChange={(e) => updateRectangle(selectedRect.id, { width: parseInt(e.target.value) || 0 })}
+                  className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Height</label>
+                <input
+                  type="number"
+                  value={Math.round(Math.abs(selectedRect.height))}
+                  onChange={(e) => updateRectangle(selectedRect.id, { height: parseInt(e.target.value) || 0 })}
+                  className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:border-blue-500 focus:outline-none"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -257,75 +273,83 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Draw Rectangles
-        </h1>
-
-        <div className="mb-4 text-center">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+      {/* Top toolbar */}
+      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <h1 className="text-xl font-semibold text-gray-800">Drawing App</h1>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-gray-600">
+            Click and drag to draw • Click to select and move
+          </span>
           <button
             onClick={clearCanvas}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+            className="px-3 py-1.5 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors"
           >
             Clear Canvas
           </button>
         </div>
+      </div>
 
-        <div className="mb-4 text-center text-gray-600">
-          Click and drag to draw rectangles • Click existing rectangles to move them
+      {/* Main layout with three sections */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Sidebar - Layers */}
+        <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+          <div className="flex-1 overflow-y-auto">
+            <LayerList />
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3">
-            <div
-              ref={canvasRef}
-              className="relative w-full h-96 bg-white border-2 border-gray-300 rounded-lg shadow-lg cursor-crosshair"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-            >
-          {rectangles.map((rectangle) => (
-            <div
-              key={rectangle.id}
-              className={`absolute border-2 transition-all cursor-move ${
-                movingRectId === rectangle.id
-                  ? "border-orange-500 opacity-90"
-                  : selectedRectId === rectangle.id
-                  ? "border-blue-600 opacity-80"
-                  : "border-gray-400 opacity-70 hover:border-gray-600 hover:opacity-80"
-              }`}
-              style={{
-                left: rectangle.width >= 0 ? rectangle.x : rectangle.x + rectangle.width,
-                top: rectangle.height >= 0 ? rectangle.y : rectangle.y + rectangle.height,
-                width: Math.abs(rectangle.width),
-                height: Math.abs(rectangle.height),
-                backgroundColor: rectangle.color,
-              }}
-            />
-          ))}
+        {/* Center Canvas Area */}
+        <div className="flex-1 bg-gray-100 flex items-center justify-center p-4">
+          <div
+            ref={canvasRef}
+            className="relative bg-white border border-gray-300 shadow-lg cursor-crosshair"
+            style={{ width: '800px', height: '600px' }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
+            {rectangles.map((rectangle) => (
+              <div
+                key={rectangle.id}
+                className={`absolute border-2 transition-all cursor-move ${
+                  movingRectId === rectangle.id
+                    ? "border-orange-500 opacity-90"
+                    : selectedRectId === rectangle.id
+                    ? "border-blue-600 opacity-80"
+                    : "border-gray-400 opacity-70 hover:border-gray-600 hover:opacity-80"
+                }`}
+                style={{
+                  left: rectangle.width >= 0 ? rectangle.x : rectangle.x + rectangle.width,
+                  top: rectangle.height >= 0 ? rectangle.y : rectangle.y + rectangle.height,
+                  width: Math.abs(rectangle.width),
+                  height: Math.abs(rectangle.height),
+                  backgroundColor: rectangle.color,
+                }}
+              />
+            ))}
 
-          {currentRect && (
-            <div
-              className="absolute border-2 border-green-500 bg-green-200 opacity-70"
-              style={{
-                left: currentRect.width >= 0 ? currentRect.x : currentRect.x + currentRect.width,
-                top: currentRect.height >= 0 ? currentRect.y : currentRect.y + currentRect.height,
-                width: Math.abs(currentRect.width),
-                height: Math.abs(currentRect.height),
-              }}
-            />
-          )}
-            </div>
+            {currentRect && (
+              <div
+                className="absolute border-2 border-green-500 bg-green-200 opacity-70"
+                style={{
+                  left: currentRect.width >= 0 ? currentRect.x : currentRect.x + currentRect.width,
+                  top: currentRect.height >= 0 ? currentRect.y : currentRect.y + currentRect.height,
+                  width: Math.abs(currentRect.width),
+                  height: Math.abs(currentRect.height),
+                }}
+              />
+            )}
           </div>
+        </div>
 
-          <div className="lg:col-span-1 space-y-4">
-            <LayerList />
+        {/* Right Sidebar - Properties */}
+        <div className="w-64 bg-white border-l border-gray-200 flex flex-col">
+          <div className="flex-1 overflow-y-auto">
             <PropertiesPanel />
           </div>
         </div>
-
       </div>
     </div>
   );
